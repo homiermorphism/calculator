@@ -18,11 +18,11 @@ delButton.addEventListener('click', backspace);
 equalButton.addEventListener('click', function() {
   operate();
   resultDisplay.innerHTML = result;
-  oldResult = parseInt(result);
   oldResultDisplay.innerHTML = '';
   operatorDisplay.innerHTML = '';
   result = '';
   lastKeyPressed = 'equal';
+  console.log(lastKeyPressed, result, oldResult);
 });
 
   // operator buttons
@@ -54,8 +54,6 @@ for (i=0; i < operators.length; i++) {
         operator = e.target.id;
 
       }
-      operatorDisplay.innerHTML = e.target.innerHTML;
-
       // reset the current input for the querySelector
       result = '';
       resultDisplay.innerHTML = '';
@@ -64,10 +62,16 @@ for (i=0; i < operators.length; i++) {
     // if last key pressed was the equal sign
     if (lastKeyPressed === 'equal') {
       oldResultDisplay.innerHTML = oldResult;
-      operatorDisplay.innerHTML = e.target.innerHTML;
       resultDisplay.innerHTML = '';
     }
+
+    // allow user to replace the operator if they chose the wrong one
+    if (lastKeyPressed === 'operator') {
+      operator = e.target.id;
+    }
+
     lastKeyPressed = 'operator';
+    operatorDisplay.innerHTML = e.target.innerHTML;
   });
 }
 
@@ -75,16 +79,18 @@ for (i=0; i < operators.length; i++) {
 for (i = 0 ; i <= 9 ; i++) {
   let button = document.getElementById(i.toString());
   button.addEventListener('click', function(e) {
-    if (lastKeyPressed === '' || 'number') {
+    if (lastKeyPressed === '' || lastKeyPressed === 'number' || lastKeyPressed === 'operator') {
       result += e.target.value;
+      console.log(lastKeyPressed, result, oldResult);
     }
-    else if (lastKeyPressed === 'equal') {
-      oldResult = result;
-      result = '';
+
+    if (lastKeyPressed === 'equal') {
+      clearEverythingFunction();
       result += e.target.value;
+      console.log(lastKeyPressed, result, oldResult);
     }
-  resultDisplay.innerHTML = result;
-  lastKeyPressed = 'number';
+    lastKeyPressed = 'number';
+    resultDisplay.innerHTML = result;
   });
 }
 
@@ -101,7 +107,6 @@ function clearEverythingFunction() {
 function backspace() {
   result = result.slice(0,-1);
   resultDisplay.innerHTML = result;
-  lastKeyPressed = '';
 }
 
 function operate() {
@@ -110,6 +115,19 @@ function operate() {
   if (operator === 'add') {
     result += oldResult;
   }
+
+  if (operator === 'subtract') {
+    result = oldResult - result;
+  }
+
+  if (operator === 'multiply') {
+    result *= oldResult;
+  }
+
+  if (operator === 'divide') {
+    result = oldResult / result;
+  }
+
   resultDisplay.innerHTML = result;
   oldResult = result;
 }
