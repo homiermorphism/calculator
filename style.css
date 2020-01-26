@@ -11,9 +11,25 @@
   width: 420px;
   margin: 10px;
   background-color: white;
+  bottom: 0;
   text-align: right;
-  font-size: 400%;
   font-family: 'Orbitron', sans-serif;
+  position: relative;
+}
+
+.old-result {
+  height: 25px;
+  font-size:150%
+}
+
+.operator {
+  height: 25px;
+  font-size:150%;
+}
+
+.result {
+  height: 50px;
+  font-size: 250%;
 }
 
 button {

@@ -1,94 +1,99 @@
 // variables
 const clearEverything = document.getElementById('clear-everything');
-const displayScreen = document.querySelector('.display-screen');
 const equalButton = document.getElementById('equal');
 const delButton = document.getElementById('backspace');
-const addButton = document.getElementById('add');
-const subtractButton = document.getElementById('subtract');
-const multiplyButton = document.getElementById('multiply');
-const divideButton = document.getElementById('divide');
+const oldResultDisplay = document.querySelector('.old-result');
+const operatorDisplay = document.querySelector('.operator');
+const resultDisplay = document.querySelector('.result');
 
-var numbersClicked = [];
-var string = '';
-var oldString = '';
+var oldResult = '';
 var result = '';
+var operator = '';
+var operators = ['add', 'subtract', 'multiply', 'divide'];
 
 // event listeners
-clearEverything.addEventListener('click', clear);
+clearEverything.addEventListener('click', clearEverythingFunction);
 delButton.addEventListener('click', backspace);
-
-addButton.addEventListener('click', function(e) {
-  oldString = string;
-  numbersClicked = [];
-  operator = e.target.id;
+equalButton.addEventListener('click', function() {
+  operate();
+  resultDisplay.innerHTML = result;
+  oldResult = parseInt(result);
+  oldResultDisplay.innerHTML = '';
+  operatorDisplay.innerHTML = '';
+  result = '';
 });
 
-equalButton.addEventListener('click', operate);
+  // operator buttons
+for (i=0; i < operators.length; i++) {
+  let operatorButton = document.getElementById(operators[i]);
+  operatorButton.addEventListener('click', function(e) {
+    // if the user hasn't entered anything, do nothing
+    if (result === '' && oldResult === '') {}
 
-// the equals button works when I put the operate function inside
-// the event listener, but not when I put it as it's own function
-// WTFFF
-// I don't see the problem, especially because the clear and backspace
-// functions work. The operate function doesn't do a THING and says
-// numbersClicked = [], while backspace says it's the array of the numbers
-// actually clicked
+    // else if this is the first operator button clicked in the sequence
+    else if (result != '' && oldResult === '') {
+      // display the operator and set the operator for the operate function
+      operatorDisplay.innerHTML = e.target.innerHTML;
+      operator = e.target.id;
 
+      // move the last number the user inputted to the top of the screen
+      oldResult = parseInt(result);
+      oldResultDisplay.innerHTML = oldResult;
+
+      // reset the current input for the user
+      result = '';
+      resultDisplay.innerHTML = '';
+    }
+
+    // else if this is not the first operator button clicked
+    else if (oldResult != '') {
+      // perform the operation that was clicked before this one
+      operate();
+      oldResultDisplay.innerHTML = result;
+
+      // after operating the previous operation, store the new one clicked
+      operator = e.target.id;
+      operatorDisplay.innerHTML = e.target.innerHTML;
+
+      // reset the current input for the querySelector
+      result = '';
+      resultDisplay.innerHTML = '';
+    }
+  });
+}
+
+  // number buttons
 for (i = 0 ; i <= 9 ; i++) {
-  let id = i.toString();
-  let button = document.getElementById(id);
+  let button = document.getElementById(i.toString());
   button.addEventListener('click', function(e) {
-    numbersClicked.push(e.target.value);
-    string = numbersClicked.join('').toString();
-    displayScreen.innerHTML = string;
+    result += e.target.value;
+    resultDisplay.innerHTML = result;
   });
 }
 
 // functions
-function clear() {
-  numbersClicked = [];
-  displayScreen.innerHTML = '';
+function clearEverythingFunction() {
+  result = '';
+  oldResult = '';
+  operator = '';
+  resultDisplay.innerHTML = '';
+  operatorDisplay.innerHTML = '';
+  oldResultDisplay.innerHTML = '';
 }
 
 function backspace() {
-  numbersClicked.pop();
-  string = numbersClicked.join('').toString();
-  displayScreen.innerHTML = string;
+  result = result.slice(0,-1);
+  resultDisplay.innerHTML = result;
 }
 
 function operate() {
+  result = parseInt(result);
+  if (operator != '') {
+    let oldResult = result;
+  }
   if (operator === 'add') {
-    result = add(oldString, string);
-    displayScreen.innerHTML = result;
+    result += oldResult;
   }
-}
-
-function add(x,y) {
-  return x + y;
-}
-
-function subtract(x,y) {
-  return x - y;
-}
-
-function multiply(x,y) {
-  return x * y;
-}
-
-function divide(x,y) {
-  return x / y;
-}
-
-function operate(x, y, operator) {
-  if (operator === '+') {
-    add(x,y);
-  }
-  else if (operator === '-') {
-    subtract(x,y);
-  }
-  else if (operator === '*') {
-    multiply(x,y);
-  }
-  else if (operator === '/') {
-    divide(x,y);
-  }
+  resultDisplay.innerHTML = result;
+  oldResult = result;
 }
