@@ -1,13 +1,10 @@
-// bugs found: strings of operations not working correctly (I think the operators aren't being stored correctly)
-
-
-
 // variables
 const clearEverything = document.getElementById('clear-everything');
 const clearResultButton = document.getElementById('clear-once');
 const delButton = document.getElementById('backspace');
 const decimalButton = document.getElementById('decimal');
 const equalButton = document.getElementById('equal');
+const plusMinusButton = document.getElementById('plus-minus');
 
 const oldResultDisplay = document.querySelector('.old-result');
 const operatorDisplay = document.querySelector('.operator');
@@ -23,6 +20,20 @@ var operators = ['add', 'subtract', 'multiply', 'divide'];
 clearEverything.addEventListener('click', clearEverythingFunction);
 clearResultButton.addEventListener('click', clearResult);
 delButton.addEventListener('click', backspace);
+
+plusMinusButton.addEventListener('click', function() {
+  if (lastKeyPressed === 'equal') {
+    result = oldResult;
+    oldResult = '';
+  }
+
+  if (result != '') {
+    result = Number(result);
+    result = 0 - result;
+    resultDisplay.innerHTML = result;
+    lastKeyPressed = 'number';
+  }
+});
 
 decimalButton.addEventListener('click', function() {
   if (result.includes('.')) {}
@@ -47,12 +58,12 @@ equalButton.addEventListener('click', function() {
   oldResult = result;
   result = '';
   lastKeyPressed = 'equal';
-  console.log(lastKeyPressed, result, oldResult);
 });
 
-  // operator buttons
+// operator buttons
 for (i=0; i < operators.length; i++) {
   let operatorButton = document.getElementById(operators[i]);
+  operatorButton.className = 'operator-button';
   operatorButton.addEventListener('click', function(e) {
     // if the user hasn't entered anything, do nothing
     if (lastKeyPressed === '') {}
@@ -99,29 +110,27 @@ for (i=0; i < operators.length; i++) {
       operatorDisplay.innerHTML = e.target.innerHTML;
     }
 
-    console.log(operator, lastKeyPressed, result, oldResult);
     lastKeyPressed = 'operator';
   });
 }
 
-  // number buttons
+// number buttons
 for (i = 0 ; i <= 9 ; i++) {
-  let button = document.getElementById(i.toString());
-  button.addEventListener('click', function(e) {
-    if (lastKeyPressed === '' || lastKeyPressed === 'number' || lastKeyPressed
-    === 'operator' || lastKeyPressed === 'decimal') {
-      result += e.target.value;
-      console.log(lastKeyPressed, result, oldResult);
-    }
+  let numberButton = document.getElementById(i.toString());
+  numberButton.className = 'number-button';
+  numberButton.addEventListener('click', function(e) {
+    if (result.length < 11 &&
+      ['', 'number', 'operator', 'decimal'].includes(lastKeyPressed)) {
+        result += e.target.value;
+      }
 
-    if (lastKeyPressed === 'equal') {
-      clearEverythingFunction();
-      result += e.target.value;
-      console.log(lastKeyPressed, result, oldResult);
-    }
+      if (lastKeyPressed === 'equal') {
+        clearEverythingFunction();
+        result += e.target.value;
+      }
 
-    lastKeyPressed = 'number';
-    resultDisplay.innerHTML = result;
+      lastKeyPressed = 'number';
+      resultDisplay.innerHTML = result;
   });
 }
 
