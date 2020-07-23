@@ -1,4 +1,4 @@
-// variables
+// ~~~~ variables ~~~~
 const clearEverythingButton = document.getElementById('clear-everything');
 const clearResultButton = document.getElementById('clear-once');
 const delButton = document.getElementById('backspace');
@@ -16,7 +16,7 @@ var operator = '';
 var lastKeyPressed = '';
 var operators = ['add', 'subtract', 'multiply', 'divide'];
 
-// event listeners
+// ~~~~ event listeners ~~~~
 clearEverythingButton.addEventListener('click', clearEverything);
 clearResultButton.addEventListener('click', clearResult);
 delButton.addEventListener('click', backspace);
@@ -24,7 +24,7 @@ plusMinusButton.addEventListener('click', plusMinus);
 decimalButton.addEventListener('click', decimal);
 equalButton.addEventListener('click', equal);
 
-// keyboard support
+// ~~~~ keyboard support ~~~~
 document.addEventListener('keydown', function(e) {
   // clear buttons
   if (e.key === 'Delete') {
@@ -73,7 +73,6 @@ document.addEventListener('keydown', function(e) {
     decimalButton.click();
   }
 });
-
 document.addEventListener('keyup', function(e) {
   // clear buttons
   if (e.key === 'Delete') {clearResultButton.classList.toggle('button-active');;}
@@ -119,12 +118,14 @@ for (i = 0 ; i <= 9 ; i++) {
   });
 }
 
-// functions
+// ~~~~ functions ~~~~
+// clears the last result
 function clearResult() {
   result = '';
   resultDisplay.innerHTML = '';
 }
 
+// clears every result
 function clearEverything() {
   result = '';
   oldResult = '';
@@ -134,11 +135,13 @@ function clearEverything() {
   oldResultDisplay.innerHTML = '';
 }
 
+// deletes the last number/operator pressed
 function backspace() {
   result = result.slice(0,-1);
   resultDisplay.innerHTML = result;
 }
 
+// performs the operation
 function operate() {
   result = Number(result);
   oldResult = Number(oldResult);
@@ -156,6 +159,7 @@ function operate() {
   }
 }
 
+// changes the sign of the number
 function plusMinus() {
   if (lastKeyPressed === 'equal') {
     result = oldResult;
@@ -169,7 +173,7 @@ function plusMinus() {
   }
 }
 
-
+// handles the decimal button
 function decimal() {
   if (result.includes('.')) {}
   else if (lastKeyPressed === 'equal') {
@@ -183,6 +187,7 @@ function decimal() {
   lastKeyPressed = 'decimal';
 }
 
+// performs the operation when the equal button is pressed
 function equal() {
   operate();
 
@@ -195,6 +200,7 @@ function equal() {
   lastKeyPressed = 'equal';
 }
 
+// handles the display when an operator button/key is pressed
 function operatorDisplayFunction(e) {
   // if the user hasn't entered anything, do nothing
   if (oldResult === '') {}
