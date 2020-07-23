@@ -78,3 +78,26 @@ button:active, .button-active {
 .clear-button {
   background-color: #d81b60;
 }
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #bdbdbd;
+  display: flex;
+  justify-content: flex-end;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.footer a {
+  text-decoration: none;
+  color: #d81b60;
+  padding: 0 5px;
+}
+
+.footer a:hover {
+  text-decoration: none;
+  color: #26a69a;
+  background-color: #e6e6e6;
+}
